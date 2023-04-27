@@ -1,8 +1,8 @@
 #include "router.h"
 
-router::router(int newID){ ID = newID;} // Constructor
+router::router(int newID){ ID = newID; } // Constructor
 
-// Adds a new connection to the router is it didn't exist previously. Returns wether the operion was succesful.
+// Adds a new connection to the router is it didn't exist previously. Returns wether the operion was successful.
 bool router::addConnection(std::pair<int, int> newConnection){
     bool completed = false;
     bool found = false;
@@ -44,11 +44,20 @@ bool router::modifyConnection(std::pair <int, int> conToMod){
     return completed;
 }
 
+// Checks wether the router is connected to another given router.
+bool router::isConnectedTo(int containsID){
+    for(auto it = connections.begin(); it != connections.end(); ++it){
+        if(it->first == containsID) return true;
+    }
+    return false;
+}
+
+
 //Print information about the Router
 void router::print(){
     std::cout << "Router " << ID << ":\n(Connected to, Weight)\n";
     for(std::pair p : connections){
-        std::cout << '\t' << p.first << " , " << p.second << '\n';
+        std::cout << '\t' << p.first << " , " << p.second << "\n\n";
     }
 }
 
