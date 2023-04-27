@@ -16,8 +16,18 @@ public:
     bool addRouter(router); // Only adds a new router if its ID didn´t exist previously. Returns wether the operation was successful.
     std::vector<int> listRouters(); // Returns a vector containing the ID´s of the routes in the network.
     std::vector<std::pair<int, int>> getRouterConnections(int ID); // Returns the connections of a router given its ID
+    std::map<int, std::pair<int, int>> getRouterRoutRable(int ID); // Returns routing table of specified router
 
-    // TODO: Print a router. Modify an edge. Delete routers. Upsate routing tables when the graph is modified.
+
+    void updateRoutingTables(); // Update or create the routing table for each router
+    void printRouters(); // Print information about each router
+    bool modifyEdge(int startNode, int finalNode, int newWeight); // Modify connection between two routers
+    bool createEdge(int startNode, int finalNode, int newWeight); // Create edge between two nodes
+
+
+
+
+    // TODO:  Modify an edge. Delete routers. Upsate routing tables when the graph is modified.
     // Get router by id.
     // ALYAWS CHECK THAT YOU'RE NOT FUCKING UP THE GRAPH
 

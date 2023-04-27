@@ -5,6 +5,8 @@ network::network()
 
 }
 
+
+
 // Adds a router. Only adds a new router if its ID didn´t exist previously. Returns wether the operation was successful.
 bool network::addRouter(router newRouter){
     bool completed = false;
@@ -20,6 +22,8 @@ bool network::addRouter(router newRouter){
     return completed;
 }
 
+
+
 // Returns a vector containing the ID´s of the routes in the network
 std::vector<int> network::listRouters(){
     std::vector<int> listID;
@@ -30,12 +34,73 @@ std::vector<int> network::listRouters(){
 }
 
 
+
 // Returns the connections of a router given its ID
 std::vector<std::pair<int, int>> network::getRouterConnections(int ID){
     for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
         if(it->getID() == ID) return it->getConnections();
     }
     //TODO: implementar un return predeterminado si no se encuentra el ID
+}
+
+// Returns routing table of specified router
+std::map<int, std::pair<int, int>> network::getRouterRoutRable(int ID){
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        if(it->getID() == ID) return it->getRoutingTable();
+    }
+    //TODO: implementar un return predeterminado si no se encuentra el ID
+}
+
+
+
+// Update or create the routing table for each router
+void network::updateRoutingTables(){
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        it->setRoutingTable(dijkstras(*it));
+    }
+}
+
+
+
+// Print information about each router
+void network::printRouters(){
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        it->print();
+    }
+}
+
+
+
+// Modify connection between two routers
+bool network::modifyEdge(int startNode, int finalNode, int newWeight){
+    bool cond1 = false;
+    bool cond2 = false;
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        if(it->getID() == startNode){
+            cond1 = it->modifyConnection(std::make_pair(finalNode, newWeight)); // Modify connection of startNode
+        }
+        if(it->getID() == finalNode){
+            cond2 = it->modifyConnection(std::make_pair(startNode, newWeight)); // Modify connection of finalNode
+        }
+    }
+    return (cond1 && cond2);
+}
+
+
+
+// Create edge between two nodes
+bool network::createEdge(int startNode, int finalNode, int newWeight){
+    bool cond1 = false;
+    bool cond2 = false;
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        if(it->getID() == startNode){
+            cond1 = it->addConnection(std::make_pair(finalNode, newWeight)); // Add connection to startNode (router)
+        }
+        if(it->getID() == finalNode){
+            cond2 = it->addConnection(std::make_pair(startNode, newWeight)); // Add connection to finalNode (router)
+        }
+    }
+    return (cond1 && cond2);
 }
 
 
@@ -69,6 +134,7 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
     // The key is the router id. The pair contains (leght of path to router, via which router)
     std::map<int, std::pair<int, int>> routingTable;
 
+    /* //FOR TESTING PURPOSES
     std::cout << "Distance table::::::::::::::::::::::::::::::::::::: " << std::endl;
     for(auto j : distTable){
         for(auto k : j){
@@ -81,6 +147,7 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
         std::cout << "Key: " << key << ", Value: (" << value.first << ", " << value.second << ")" << std::endl;
     }
     std::cout << "\n\n";
+    */
 
 
     //LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP
@@ -140,6 +207,7 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
         routingTable.insert({currentID, {(*currentPos)[1], (*currentPos)[2]}}); // router, (lenghtToIT, viaWhichRouter)
         distTable.pop_front(); // Erase the fisrt router of distTable (currentID)
 
+        /* //FOR TESTING PURPOSES
         std::cout << "Distance table::::::::::::::::::::::::::::::::::::: " << std::endl;
         for(auto j : distTable){
             for(auto k : j){
@@ -152,14 +220,9 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
             std::cout << "Key: " << key << ", Value: (" << value.first << ", " << value.second << ")" << std::endl;
         }
         std::cout << "\n\n";
-    }
+        */
+    }    
 
-    // Se descartan los nodes que ya están analizados
-    // -7 significa distancia infinita
-    // Se comparan las distancias(ver siguiente linea) obtenida con currentConnections a las de distTable
-        // La distancia es (*currentPos)[1] (la distancia al nodo siento evaluado) + el segundo numero del correspondiente par de currentConnections
-        // Si se cumple el criterio de ser un camino más corto, se modifica en distTable (distancia) y (via,,, con currentID)
-        // Si se modifica un valor en distTable, se reorganiza distTable según los criterios
     return routingTable;
 }
 

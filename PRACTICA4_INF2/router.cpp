@@ -2,12 +2,17 @@
 
 router::router(int newID){ ID = newID; } // Constructor
 
+// Assign new routing table
+void router::setRoutingTable(std::map<int, std::pair<int, int>> newTable){
+    routingTable = newTable;
+}
+
 // Adds a new connection to the router is it didn't exist previously. Returns wether the operion was successful.
 bool router::addConnection(std::pair<int, int> newConnection){
-    bool completed = false;
+    bool completed = true;
     bool found = false;
     for(auto it = connections.begin(); it != connections.end(); ++it){
-        if(it->first == newConnection.first){ // If we are connecting to a new router
+        if(it->first == newConnection.first){ // If we are not connecting to a new router
             found  = true;
             completed = false;
         }
@@ -55,10 +60,15 @@ bool router::isConnectedTo(int containsID){
 
 //Print information about the Router
 void router::print(){
-    std::cout << "Router " << ID << ":\n(Connected to, Weight)\n";
+    std::cout << "Router " << ID << ":\nConnections (Connected to, Weight):\n";
     for(std::pair p : connections){
-        std::cout << '\t' << p.first << " , " << p.second << "\n\n";
+        std::cout << '\t' << p.first << " , " << p.second << "\n";
     }
+    std::cout << "Routing table (Destination router, Distance, Via which node):\n";
+    for(auto const& [key, value] : routingTable){
+        std::cout << '\t' << key << " , " << value.first << ", " << value.second << '\n';
+    }
+    std::cout << '\n';
 }
 
 
