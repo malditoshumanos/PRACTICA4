@@ -23,6 +23,10 @@ public:
     void printRouters(); // Print information about each router
     bool modifyEdge(int startNode, int finalNode, int newWeight); // Modify connection between two routers
     bool createEdge(int startNode, int finalNode, int newWeight); // Create edge between two nodes
+    bool deleteEdge(int startNode, int finalNode, int weight); // Delete connection between two nodes
+
+    bool deleteRouter(int deleteID); // Delete router from the network.
+
 
 
 

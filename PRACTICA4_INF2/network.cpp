@@ -103,6 +103,46 @@ bool network::createEdge(int startNode, int finalNode, int newWeight){
     return (cond1 && cond2);
 }
 
+// Delete connection between two nodes
+bool network::deleteEdge(int startNode, int finalNode, int weight){
+    bool cond1 = false;
+    bool cond2 = false;
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        if(it->getID() == startNode){
+            cond1 = it->deleteConnection(std::make_pair(finalNode, weight));
+        }
+        if(it->getID() == finalNode){
+            cond2 = it->deleteConnection(std::make_pair(startNode, weight));
+        }
+    }
+    return (cond1 && cond2);
+}
+
+// Delete router from the network.
+bool network::deleteRouter(int deleteID){
+    bool cond1 = false;
+    bool cond2 = false;
+    //Delete all the connections from the node
+    std::vector<std::pair<int, int>> deleteConnections = getRouterConnections(deleteID);
+    for(std::pair delCon : deleteConnections){ // Recall connections is structured as ( nodeConnected, weight )
+        if( deleteEdge(deleteID, delCon.first, delCon.second) ) cond1 = true;
+        else cond1 = false;
+    }
+
+    // Delete the router from the network
+    auto itDel = networkRouters.end();
+    for(auto it = networkRouters.begin(); it != networkRouters.end(); ++it){
+        if(it->getID() == deleteID){
+            cond2 = true;
+            itDel = it;
+            break;
+        }
+    }
+    if(itDel != networkRouters.end()) networkRouters.erase(itDel);
+}
+
+
+
 
 
 

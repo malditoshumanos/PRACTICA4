@@ -109,11 +109,16 @@ int main()
                     // The connection is represented by a pair (node, weight)
                     red.createEdge(idToADD, x, w);
                 }
+                std::cout << '\n';
                 red.updateRoutingTables();
                 break;}
             case 'E':{
                 //Eliminar enrutador de la red ----------------------------------------------------------------
-
+                int deleteRouter;
+                std::cout << "Ingrese ID del router a eliminar de la red: ";
+                std::cin >> deleteRouter;
+                if(red.deleteRouter(deleteRouter)) std::cout << "Router correctamente eliminado.\n\n" ;
+                red.updateRoutingTables();
                 break;}
             case 'M':{
                 //Modificar o crear enlace entre enrutadores --------------------------------------------------------
@@ -126,19 +131,28 @@ int main()
                 std::cout << "Ingrese el nuevo costo del enlace: \n";
                 std::cin >> newWeight;
                 if(red.modifyEdge(startRout, endRout, newWeight)){
-                    std::cout << "Enlace modificado! \n";
+                    std::cout << "Enlace modificado! \n\n";
                 }else if(red.createEdge(startRout, endRout, newWeight)){
-                    std::cout << "Enlace creado! \n";
+                    std::cout << "Enlace creado! \n\n";
                 }
                 red.updateRoutingTables();
                 break;}
             case 'B':{
                 //Borrar enlace entre enrutadores ----------------------------------------------------------------
-
+                int delConStart;
+                int delConEnd;
+                int delWeight;
+                std::cout << "Ingrese los 2 routers entre los que quiere eliminar la conexion y el costo asociado a esta: \n";
+                std::cin >> delConStart;
+                std::cin >> delConEnd;
+                std::cin >> delWeight;
+                if( red.deleteEdge(delConStart, delConEnd, delWeight) ) std::cout << "Enlace correctamente eliminado. \n\n";
+                red.updateRoutingTables();
                 break;}
             case 'P':{
                 //Mostrar los enrutadores y las conexiones entre ellos ----------------------------------------------------------------
                 red.printRouters();
+                std::cout << '\n';
                 break;}
             case 'C':{
                 //Calcular costo de envío entre dos enrutadores y camino optimo ----------------------------------------------------------------
@@ -167,7 +181,7 @@ int main()
                 for (auto it = path.rbegin(); it != path.rend(); ++it) {
                         std::cout << *it << ", ";
                 }
-                std::cout << '\n';
+                std::cout << "\n\n";
 
                 break;}
         default:
