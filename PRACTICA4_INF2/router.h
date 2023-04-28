@@ -15,10 +15,6 @@ private:
     std::vector<std::pair<int, int>> connections;
     std::map<int, std::pair<int, int>> routingTable;
 
-
-    // TODO: include method to find the cost and the path to a given router.
-
-
 public:
     // The methods that have a bool return type return wether the operation was succesful.
 

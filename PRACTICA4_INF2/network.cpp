@@ -149,7 +149,7 @@ bool network::deleteRouter(int deleteID){
 
 
 
-//TODO: Add explanation
+//Explanation: https://www.youtube.com/watch?v=GazC3A4OQTE
 std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
     // List that contains: ( nodeID, distanceToNode, viaWhichNode )
     std::list<std::array<int, 3>> distTable;
@@ -172,23 +172,7 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
 
     // To store the results of the algorithm
     // The key is the router id. The pair contains (leght of path to router, via which router)
-    std::map<int, std::pair<int, int>> routingTable;
-
-    /* //FOR TESTING PURPOSES
-    std::cout << "Distance table::::::::::::::::::::::::::::::::::::: " << std::endl;
-    for(auto j : distTable){
-        for(auto k : j){
-            std::cout << k << " , ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "Routing table for rout1::::::::::::::::::::::::::::::::::::: " << std::endl;
-    for (auto const& [key, value] : routingTable) {
-        std::cout << "Key: " << key << ", Value: (" << value.first << ", " << value.second << ")" << std::endl;
-    }
-    std::cout << "\n\n";
-    */
-
+    std::map<int, std::pair<int, int>> routingTable;    
 
     //LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP
     while(!distTable.empty()){
@@ -247,20 +231,6 @@ std::map<int, std::pair<int, int>> network::dijkstras(router startRouter){
         routingTable.insert({currentID, {(*currentPos)[1], (*currentPos)[2]}}); // router, (lenghtToIT, viaWhichRouter)
         distTable.pop_front(); // Erase the fisrt router of distTable (currentID)
 
-        /* //FOR TESTING PURPOSES
-        std::cout << "Distance table::::::::::::::::::::::::::::::::::::: " << std::endl;
-        for(auto j : distTable){
-            for(auto k : j){
-                std::cout << k << " , ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << "Routing table for rout1::::::::::::::::::::::::::::::::::::: " << std::endl;
-        for (auto const& [key, value] : routingTable) {
-            std::cout << "Key: " << key << ", Value: (" << value.first << ", " << value.second << ")" << std::endl;
-        }
-        std::cout << "\n\n";
-        */
     }    
 
     return routingTable;
